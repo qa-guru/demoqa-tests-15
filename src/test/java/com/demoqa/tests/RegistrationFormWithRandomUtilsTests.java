@@ -8,8 +8,20 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
+import static com.demoqa.tests.TestData.*;
+import static com.demoqa.tests.TestData.year;
+import static com.demoqa.utils.RandomUtils.*;
 
-public class RegistrationFormTests {
+public class RegistrationFormWithRandomUtilsTests {
+
+    String firstName = getRandomString(10);
+    String lastName = getRandomString(10);
+    String email = getRandomEmail();
+    String currentAddress = getRandomStringAlphabetic(20);
+    String phone = getRandomPhone();
+    String day = "30";
+    String month = "July";
+    String year = "2008";
 
     @BeforeAll
     static void configure() {
@@ -24,19 +36,19 @@ public class RegistrationFormTests {
         executeJavaScript("$('footer').remove()");
         executeJavaScript("$('#fixedban').remove()");
 
-        $("#firstName").setValue("Alex");
-        $("#lastName").setValue("Egorov");
-        $("#userEmail").setValue("alex@egorov.com");
+        $("#firstName").setValue(firstName);
+        $("#lastName").setValue(lastName);
+        $("#userEmail").setValue(email);
         $("#genterWrapper").$(byText("Other")).click(); // best
-        $("#userNumber").setValue("1234567890");
+        $("#userNumber").setValue(phone);
         $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").selectOption("July");
-        $(".react-datepicker__year-select").selectOption("2008");
-        $(".react-datepicker__day--030:not(.react-datepicker__day--outside-month)").click();
+        $(".react-datepicker__month-select").selectOption(month);
+        $(".react-datepicker__year-select").selectOption(year);
+        $(".react-datepicker__day--0" + day + ":not(.react-datepicker__day--outside-month)").click();
         $("#subjectsInput").setValue("Math").pressEnter();
         $("#hobbiesWrapper").$(byText("Sports")).click(); // best
         $("#uploadPicture").uploadFromClasspath("img/1.png");
-        $("#currentAddress").setValue("Some address 1");
+        $("#currentAddress").setValue(currentAddress);
         $("#state").click();
         $("#stateCity-wrapper").$(byText("NCR")).click();
         $("#city").click();
@@ -46,8 +58,9 @@ public class RegistrationFormTests {
         $(".modal-dialog").should(appear);
         $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
 
-        $(".table-responsive table").shouldHave(text("Alex"), text("Egorov"),
-                text("alex@egorov.com"), text("1234567890"), text("30 June,2008"));
+        $(".table-responsive table").shouldHave(text(firstName), text(lastName),
+                text(email), text(phone),
+                text(day + " " + month + "," + year));
     }
 
 }
