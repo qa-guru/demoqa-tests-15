@@ -1,4 +1,4 @@
-package com.demoqa;
+package com.demoqa.tests;
 
 import org.openqa.selenium.By;
 
